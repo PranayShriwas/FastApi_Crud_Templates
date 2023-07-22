@@ -41,18 +41,18 @@ async def read_item(request: Request):
 @router.post("/registration/", response_class=HTMLResponse)
 async def ragistration(request: Request, name: str = Form(...),
                        email: str = Form(...),
-                       mobile: str = Form(...),
+                       phone: str = Form(...),
                        password: str = Form(...)):
     if await Student.filter(email=email).exists():
         flash(request, "Email already Exists")
         return RedirectResponse("/", status_code=status.HTTP_302_FOUND)
-    elif await Student.filter(mobile=mobile).exists():
+    elif await Student.filter(phone=phone).exists():
         flash(request, "Phone Number already Exists")
         return RedirectResponse("/", status_code=status.HTTP_302_FOUND)
     else:
-        await Student.create(name=name, email=email, mobile=mobile, password=get_password_hash(password))
+        await Student.create(name=name, email=email, phone=phone, password=get_password_hash(password))
         flash(request, "Student sucessfull Ragistrated")
-        return RedirectResponse("/", status_code=status.HTTP_201_CREATED)
+        return RedirectResponse("/table/", status_code=status.HTTP_201_CREATED)
 
 
 @router.get('/table/', response_class=HTMLResponse)
