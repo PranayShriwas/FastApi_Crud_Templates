@@ -62,3 +62,60 @@ async def read_userm(request: Request):
         "user": user,
         "request": request
     })
+
+
+@router.get("/login/", response_class=HTMLResponse)
+async def read_item(request: Request):
+    return templates.TemplateResponse("login.html", {
+        "request": request,
+    })
+
+
+@router.post('/loginuser/')
+async def login(request: Request, Phone: str = Form(...),
+                Password: str = Form(...)):
+    Phone = Phone
+    user = await load_user(Phone)
+    if not user:
+        return {'USER NOT REGISTERED'}
+    elif not verify_password(Password, user.password):
+        return {'PASSWORD IS WRONG'}
+    access_token = manager.create_access_token(
+        data=dict(sub=Phone)
+    )
+    if "_messages" not in request.session:
+        request.session['_messages'] = []
+        new_dict = {"user_id": str(
+            user.id), "Phone": Phone, "access_token": str(access_token)}
+        request.session['_messages'].append(
+            new_dict
+        )
+    return RedirectResponse('/welcome/', status_code=status.HTTP_302_FOUND)
+
+
+@router.get("/update/{id}", response_class=HTMLResponse)
+async def read_item(request: Request, id: int):
+    user = await Student.get(id=id)
+    return templates.TemplateResponse("update.html", {
+        "request": request,
+        "user": user
+    })
+
+
+@router.post("/update_detials/")
+async def update(request: Request, id: int = Form(...),
+                 name: str = Form(...),
+                 email: str = Form(...),
+                 phone: str = Form(...),
+                 ):
+    user = await Student.get(id=id)
+    await user.filter(id=id).update(name=name,
+                                    email=email, phone=phone
+                                    )
+    return RedirectResponse('/table/', status_code=status.HTTP_302_FOUND)
+
+
+@router.get("/delete/{id}", response_class=HTMLResponse)
+async def delete(request: Request, id: int):
+    user = await Student.get(id=id).delete()
+    return RedirectResponse('/table/', status_code=status.HTTP_302_FOUND)

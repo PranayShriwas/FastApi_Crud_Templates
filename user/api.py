@@ -13,28 +13,28 @@ from . pydantic_models import Person, data, delete_data, update, Login
 from fastapi.responses import JSONResponse, RedirectResponse, HTMLResponse
 
 app = APIRouter()
-SECRET = 'your-secret-key'
+# SECRET = 'your-secret-key'
 
-manager = LoginManager(SECRET, token_url='/user_login')
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# manager = LoginManager(SECRET, token_url='/user_login')
+# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-manager = LoginManager(SECRET, token_url='/login')
-
-
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+# manager = LoginManager(SECRET, token_url='/login')
 
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
+# def verify_password(plain_password, hashed_password):
+#     return pwd_context.verify(plain_password, hashed_password)
 
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+# def get_password_hash(password):
+#     return pwd_context.hash(password)
 
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
+# def verify_password(plain_password, hashed_password):
+#     return pwd_context.verify(plain_password, hashed_password)
+
+
+# def get_password_hash(password):
+#     return pwd_context.hash(password)
 
 
 @app.post('/')
@@ -76,23 +76,23 @@ async def update_student(data: update):
         return student_obj
 
 
-@manager.user_loader()
-async def load_user(email: str):
-    if await Student.exists(email=email):
-        user = await Student.get(email=email)
-        return user
+# @manager.user_loader()
+# async def load_user(email: str):
+#     if await Student.exists(email=email):
+#         user = await Student.get(email=email)
+#         return user
 
 
-@app.post('/login/')
-async def login(data: Login):
-    email = data.email
-    user = await load_user(email)
+# @app.post('/login/')
+# async def login(data: Login):
+#     email = data.email
+#     user = await load_user(email)
 
-    if not user:
-        return JSONResponse({'status': False, 'message': 'User not Registered'}, status_code=403)
-    elif not verify_password(data.password, user.password):
-        return JSONResponse({'status': False, 'message': 'Invalid password'}, status_code=403)
-    access_token = manager.create_access_token(data={'sub': {'id': user.id}})
-    new_dict = jsonable_encoder(user)
-    new_dict.update({'access_token': access_token})
-    return Token(access_token=access_token, token_type='bearer')
+#     if not user:
+#         return JSONResponse({'status': False, 'message': 'User not Registered'}, status_code=403)
+#     elif not verify_password(data.password, user.password):
+#         return JSONResponse({'status': False, 'message': 'Invalid password'}, status_code=403)
+#     access_token = manager.create_access_token(data={'sub': {'id': user.id}})
+#     new_dict = jsonable_encoder(user)
+#     new_dict.update({'access_token': access_token})
+#     return Token(access_token=access_token, token_type='bearer')
