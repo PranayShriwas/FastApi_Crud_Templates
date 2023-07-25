@@ -69,25 +69,25 @@ a {
 </head>
 <body>
 
-<form action="/registration/" method="POST">
+<form action="/updatee/" method="POST">
 
   <div class="container">
     <h1>Update Form</h1>
     <p>Please fill in this form to create an account.</p>
     <hr>
     <div id="name">
-    <input type="hidden" name="id" value="{{person.id}}">
+    <input type="hidden" name="id" value="{{user.id}}">
 
 
     <label for="email"><b>Name</b></label>
-    <input type="text" placeholder="Enter Name" name="name" id="email" value='{{person.name}}' required>
+    <input type="text" placeholder="Enter Name" name="name" id="email" value='{{user.name}}' required>
     <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" id="email" value="{{person.email}}" required>
+    <input type="text" placeholder="Enter Email" name="email" id="email" value="{{user.email}}" required>
 
    
 
     <label for="email"><b>Phone</b></label>
-    <input type="text" placeholder="Enter Phone Number" name="phone" id="email" value="{{person.phone}}" required>
+    <input type="text" placeholder="Enter Phone Number" name="phone" id="email" value="{{user.phone}}" required>
 
     <button type="submit" class="registerbtn">Update</button>
   </div>

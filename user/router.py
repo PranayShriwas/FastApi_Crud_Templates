@@ -94,7 +94,7 @@ async def login(request: Request, Phone: str = Form(...),
 
 
 @router.get("/update/{id}", response_class=HTMLResponse)
-async def read_item(request: Request, id: int):
+async def update_item(request: Request, id: int):
     user = await Student.get(id=id)
     return templates.TemplateResponse("update.html", {
         "request": request,
@@ -102,20 +102,20 @@ async def read_item(request: Request, id: int):
     })
 
 
-@router.post("/update_detials/")
+@router.post("/updatee/", response_class=HTMLResponse)
 async def update(request: Request, id: int = Form(...),
                  name: str = Form(...),
                  email: str = Form(...),
                  phone: str = Form(...),
                  ):
-    user = await Student.get(id=id)
-    await user.filter(id=id).update(name=name,
-                                    email=email, phone=phone
-                                    )
+    await Student.filter(id=id).update(name=name,
+                                       email=email,
+                                       phone=phone
+                                       )
     return RedirectResponse('/table/', status_code=status.HTTP_302_FOUND)
 
 
-@router.get("/delete/{id}", response_class=HTMLResponse)
+@router.get('/delete/{id}', response_class=HTMLResponse)
 async def delete(request: Request, id: int):
-    user = await Student.get(id=id).delete()
+    await Student.filter(id=id).delete()
     return RedirectResponse('/table/', status_code=status.HTTP_302_FOUND)
